@@ -1,10 +1,10 @@
-import { parse } from "cookie";
 import { getDb, initDb } from "./_db.js";
 
 function isAuthorized(req) {
-  const cookies = parse(req.headers.cookie || "");
-  const token = cookies.admin_session;
-  if (!token) return false;
+  const cookieHeader = req.headers.cookie || "";
+  const match = cookieHeader.match(/admin_session=([^;]+)/);
+  if (!match) return false;
+  const token = match[1];
   const expected = Buffer.from(
     `${process.env.ADMIN_USERNAME}:${process.env.SESSION_SECRET}`
   ).toString("base64");
