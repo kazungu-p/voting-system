@@ -11,6 +11,7 @@ const CANDIDATES = [
   "Mohammed Mzee Kindoro",
 ];
 
+// In-memory rate limiter (blocks brute force within a serverless instance)
 const ipAttempts = new Map();
 
 function isRateLimited(ip) {
@@ -29,8 +30,8 @@ function isValidId(id) {
   return /^\d{8}$/.test(id);
 }
 
-function hashId(id) {
-  return createHash("sha256").update(id + process.env.SESSION_SECRET).digest("hex");
+function hashValue(value) {
+  return createHash("sha256").update(value + process.env.SESSION_SECRET).digest("hex");
 }
 
 export default async function handler(req, res) {
@@ -56,19 +57,29 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid candidate." });
   }
 
-  const idHash = hashId(idNumber);
+  const idHash = hashValue(idNumber);
+  const ipHash = hashValue(ip);
 
   try {
     await initDb();
     const sql = getDb();
 
-    const [existing] = await sql`SELECT id_hash FROM voters WHERE id_hash = ${idHash}`;
-    if (existing) {
+    // Check if this IP has already voted
+    const [votedIp] = await sql`SELECT ip_hash FROM voted_ips WHERE ip_hash = ${ipHash}`;
+    if (votedIp) {
+      return res.status(400).json({ error: "A vote has already been cast from this device." });
+    }
+
+    // Check if this ID has already voted
+    const [votedId] = await sql`SELECT id_hash FROM voters WHERE id_hash = ${idHash}`;
+    if (votedId) {
       return res.status(400).json({ error: "This ID number has already been used to vote." });
     }
 
-    await sql`INSERT INTO votes (candidate, id_hash) VALUES (${candidate}, ${idHash})`;
+    // Record the vote, ID hash, and IP hash
+    await sql`INSERT INTO votes (candidate, id_hash, ip_hash) VALUES (${candidate}, ${idHash}, ${ipHash})`;
     await sql`INSERT INTO voters (id_hash) VALUES (${idHash})`;
+    await sql`INSERT INTO voted_ips (ip_hash) VALUES (${ipHash})`;
 
     const results = await sql`
       SELECT candidate, COUNT(*)::int AS votes

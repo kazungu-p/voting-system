@@ -12,7 +12,6 @@ export function getDb() {
 export async function initDb() {
   const sql = getDb();
 
-  // Stores hashed ID numbers that have already voted
   await sql`
     CREATE TABLE IF NOT EXISTS voters (
       id_hash TEXT PRIMARY KEY,
@@ -25,6 +24,14 @@ export async function initDb() {
       id SERIAL PRIMARY KEY,
       candidate TEXT NOT NULL,
       id_hash TEXT NOT NULL UNIQUE,
+      ip_hash TEXT NOT NULL,
+      voted_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS voted_ips (
+      ip_hash TEXT PRIMARY KEY,
       voted_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
