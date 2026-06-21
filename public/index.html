@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Election Voting Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0f1117;
+      --ink-light: #4a4f5e;
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --accent: #1a4f8a;
+      --accent-light: #e8f0fa;
+      --accent-hover: #163f70;
+      --success: #1a7a4a;
+      --success-bg: #e8f5ed;
+      --error: #b83232;
+      --error-bg: #fdf0f0;
+      --border: #e0e0d8;
+      --radius: 10px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--accent);
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header .badge {
+      background: rgba(255,255,255,0.18);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 4px;
+    }
+
+    header .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 60px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .card .subtitle {
+      font-size: 13.5px;
+      color: var(--ink-light);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      background: var(--bg);
+      color: var(--ink);
+      outline: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: border-color 0.15s;
+      margin-bottom: 28px;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      background: white;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 12px;
+    }
+
+    .candidates {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .candidate-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      text-align: left;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      position: relative;
+    }
+
+    .candidate-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      transform: translateY(-1px);
+    }
+
+    .candidate-btn:active { transform: translateY(0); }
+
+    .candidate-btn .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .candidate-btn .name { flex: 1; }
+
+    .candidate-btn .arrow {
+      color: var(--ink-light);
+      font-size: 18px;
+      opacity: 0.4;
+      transition: opacity 0.15s;
+    }
+
+    .candidate-btn:hover .arrow { opacity: 1; }
+
+    .message {
+      padding: 13px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .message.error { background: var(--error-bg); color: var(--error); display: block; }
+    .message.success { background: var(--success-bg); color: var(--success); display: block; }
+
+    /* Results panel */
+    #results-panel {
+      display: none;
+      margin-top: 28px;
+    }
+
+    #results-panel h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .result-row {
+      margin-bottom: 14px;
+    }
+
+    .result-row .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      margin-bottom: 5px;
+    }
+
+    .result-row .meta .cname { font-weight: 500; }
+    .result-row .meta .pct { color: var(--ink-light); font-variant-numeric: tabular-nums; }
+
+    .bar-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.6s ease;
+    }
+
+    .voted-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--success-bg);
+      color: var(--success);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-light);
+      padding: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 500px) {
+      .card { padding: 28px 20px; }
+      .card h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="badge">Official</span>
+  <span class="title">Election Voting Portal</span>
+</header>
+
+<main>
+  <div class="card" id="vote-card">
+    <h1>Cast Your Vote</h1>
+    <p class="subtitle">Enter your unique voter code, then select your candidate. Each code can only be used once.</p>
+
+    <div id="msg" class="message"></div>
+
+    <label for="code">Your Voter Code</label>
+    <input type="text" id="code" placeholder="e.g. AB3KXYZ9" maxlength="8" autocomplete="off" spellcheck="false" />
+
+    <div class="section-label">Select a Candidate</div>
+    <div class="candidates" id="candidates">
+      <button class="candidate-btn" onclick="vote('Seth Opollo')">
+        <div class="avatar">SO</div>
+        <span class="name">Seth Opollo</span>
+        <span class="arrow">›</span>
+      </button>
+      <button class="candidate-btn" onclick="vote('Victor Wanyama')">
+        <div class="avatar">VW</div>
+        <span class="name">Victor Wanyama</span>
+        <span class="arrow">›</span>
+      </button>
+      <button class="candidate-btn" onclick="vote('Ojay')">
+        <div class="avatar">OJ</div>
+        <span class="name">Ojay</span>
+        <span class="arrow">›</span>
+      </button>
+      <button class="candidate-btn" onclick="vote('Fatuma Kapera')">
+        <div class="avatar">FK</div>
+        <span class="name">Fatuma Kapera</span>
+        <span class="arrow">›</span>
+      </button>
+    </div>
+
+    <div id="results-panel">
+      <div class="voted-badge">✓ Vote recorded</div>
+      <h2>Live Results</h2>
+      <div id="results-list"></div>
+    </div>
+  </div>
+</main>
+
+<footer>Secure online voting &nbsp;·&nbsp; Each code is single-use</footer>
+
+<script>
+  let hasVoted = false;
+
+  async function vote(candidate) {
+    if (hasVoted) return;
+
+    const code = document.getElementById('code').value.trim().toUpperCase();
+    const msg = document.getElementById('msg');
+    msg.className = 'message';
+    msg.textContent = '';
+
+    if (!code) {
+      msg.className = 'message error';
+      msg.textContent = 'Please enter your voter code first.';
+      return;
+    }
+
+    // Disable buttons
+    document.querySelectorAll('.candidate-btn').forEach(b => b.disabled = true);
+
+    try {
+      const res = await fetch('/api/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, candidate })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        msg.className = 'message error';
+        msg.textContent = data.error || 'Something went wrong. Please try again.';
+        document.querySelectorAll('.candidate-btn').forEach(b => b.disabled = false);
+        return;
+      }
+
+      hasVoted = true;
+      document.getElementById('code').disabled = true;
+      showResults(data.results, candidate);
+    } catch (e) {
+      msg.className = 'message error';
+      msg.textContent = 'Network error. Please check your connection and try again.';
+      document.querySelectorAll('.candidate-btn').forEach(b => b.disabled = false);
+    }
+  }
+
+  function showResults(results, votedFor) {
+    const panel = document.getElementById('results-panel');
+    const list = document.getElementById('results-list');
+
+    // Hide candidate buttons, show results
+    document.getElementById('candidates').style.display = 'none';
+    document.getElementById('msg').className = 'message';
+    panel.style.display = 'block';
+
+    const total = results.reduce((s, r) => s + r.votes, 0) || 1;
+
+    // All candidates in order
+    const allCandidates = ['Seth Opollo', 'Victor Wanyama', 'Ojay', 'Fatuma Kapera'];
+    const map = {};
+    results.forEach(r => map[r.candidate] = r.votes);
+
+    list.innerHTML = allCandidates.map(name => {
+      const votes = map[name] || 0;
+      const pct = ((votes / total) * 100).toFixed(1);
+      const isYours = name === votedFor;
+      return `
+        <div class="result-row">
+          <div class="meta">
+            <span class="cname">${name}${isYours ? ' <span style="color:#1a7a4a;font-size:12px">✓ your vote</span>' : ''}</span>
+            <span class="pct">${pct}% &nbsp;(${votes})</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:0%" data-width="${pct}%"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Animate bars
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(b => {
+        b.style.width = b.dataset.width;
+      });
+    }, 50);
+  }
+</script>
+</body>
+</html>
