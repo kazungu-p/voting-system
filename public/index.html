@@ -11,14 +11,15 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --ink: #0f1117; --ink-light: #4a4f5e; --bg: #f7f7f5; --surface: #ffffff;
-      --accent: #1a4f8a; --accent-light: #e8f0fa; --border: #e0e0d8;
+      --accent: #1a4f8a; --accent-light: #e8f0fa;
       --success: #1a7a4a; --success-bg: #e8f5ed;
-      --error: #b83232; --error-bg: #fdf0f0; --radius: 10px;
+      --error: #b83232; --error-bg: #fdf0f0;
+      --border: #e0e0d8; --radius: 10px;
     }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; }
     header { background: var(--accent); color: white; padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
     header .badge { background: rgba(255,255,255,0.18); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; }
-    header .title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+    header .title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
     main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px 20px 60px; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 32px; width: 100%; max-width: 480px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
     .card h1 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--ink); margin-bottom: 6px; }
@@ -31,7 +32,7 @@
     .candidate-btn { display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 8px; background: white; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; color: var(--ink); text-align: left; transition: border-color 0.15s, background 0.15s, transform 0.1s; }
     .candidate-btn:hover { border-color: var(--accent); background: var(--accent-light); transform: translateY(-1px); }
     .candidate-btn:active { transform: translateY(0); }
-    .candidate-btn .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-light); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+    .candidate-btn .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent-light); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
     .candidate-btn .name { flex: 1; }
     .candidate-btn .arrow { color: var(--ink-light); font-size: 18px; opacity: 0.4; transition: opacity 0.15s; }
     .candidate-btn:hover .arrow { opacity: 1; }
@@ -52,10 +53,12 @@
   </style>
 </head>
 <body>
+
 <header>
   <span class="badge">Official</span>
   <span class="title">Election Voting Portal</span>
 </header>
+
 <main>
   <div class="card">
     <h1>Cast Your Vote</h1>
@@ -71,14 +74,23 @@
       <button class="candidate-btn" onclick="vote('Seth Opollo')">
         <div class="avatar">SO</div><span class="name">Seth Opollo</span><span class="arrow">›</span>
       </button>
-      <button class="candidate-btn" onclick="vote('Victor Wanyama')">
-        <div class="avatar">VW</div><span class="name">Victor Wanyama</span><span class="arrow">›</span>
+      <button class="candidate-btn" onclick="vote('Paul Wanyama')">
+        <div class="avatar">VW</div><span class="name">Paul Wanyama</span><span class="arrow">›</span>
       </button>
       <button class="candidate-btn" onclick="vote('Ojay')">
         <div class="avatar">OJ</div><span class="name">Ojay</span><span class="arrow">›</span>
       </button>
       <button class="candidate-btn" onclick="vote('Fatuma Kapera')">
         <div class="avatar">FK</div><span class="name">Fatuma Kapera</span><span class="arrow">›</span>
+      </button>
+      <button class="candidate-btn" onclick="vote('Sir Maurice')">
+        <div class="avatar">SM</div><span class="name">Sir Maurice</span><span class="arrow">›</span>
+      </button>
+      <button class="candidate-btn" onclick="vote('Makazi')">
+        <div class="avatar">MK</div><span class="name">Makazi</span><span class="arrow">›</span>
+      </button>
+      <button class="candidate-btn" onclick="vote('Mohammed Mzee Kindoro')">
+        <div class="avatar">MMK</div><span class="name">Mohammed Mzee Kindoro</span><span class="arrow">›</span>
       </button>
     </div>
 
@@ -89,18 +101,29 @@
     </div>
   </div>
 </main>
+
 <footer>Secure online voting &nbsp;·&nbsp; One vote per ID number</footer>
 
 <script>
+  const ALL_CANDIDATES = [
+    'Seth Opollo',
+    'Paul Wanyama',
+    'Ojay',
+    'Fatuma Kapera',
+    'Sir Maurice',
+    'Makazi',
+    'Mohammed Mzee Kindoro'
+  ];
+
   let hasVoted = false;
 
-  // Only allow digits
-  document.getElementById('idNumber').addEventListener('input', function() {
+  document.getElementById('idNumber').addEventListener('input', function () {
     this.value = this.value.replace(/\D/g, '');
   });
 
   async function vote(candidate) {
     if (hasVoted) return;
+
     const idNumber = document.getElementById('idNumber').value.trim();
     const msg = document.getElementById('msg');
     msg.className = 'message';
@@ -147,9 +170,8 @@
     const total = results.reduce((s, r) => s + r.votes, 0) || 1;
     const map = {};
     results.forEach(r => map[r.candidate] = r.votes);
-    const allCandidates = ['Seth Opollo', 'Victor Wanyama', 'Ojay', 'Fatuma Kapera'];
 
-    document.getElementById('results-list').innerHTML = allCandidates.map(name => {
+    document.getElementById('results-list').innerHTML = ALL_CANDIDATES.map(name => {
       const votes = map[name] || 0;
       const pct = ((votes / total) * 100).toFixed(1);
       const isYours = name === votedFor;

@@ -3,9 +3,12 @@ import { createHash } from "crypto";
 
 const CANDIDATES = [
   "Seth Opollo",
-  "Victor Wanyama",
+  "Paul Wanyama",
   "Ojay",
   "Fatuma Kapera",
+  "Sir Maurice",
+  "Makazi",
+  "Mohammed Mzee Kindoro",
 ];
 
 const ipAttempts = new Map();

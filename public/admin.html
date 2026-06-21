@@ -89,6 +89,16 @@
 </main>
 
 <script>
+  const ALL_CANDIDATES = [
+    'Seth Opollo',
+    'Paul Wanyama',
+    'Ojay',
+    'Fatuma Kapera',
+    'Sir Maurice',
+    'Makazi',
+    'Mohammed Mzee Kindoro'
+  ];
+
   async function login() {
     const u = document.getElementById('u').value.trim();
     const p = document.getElementById('p').value;
@@ -121,16 +131,14 @@
 
     document.getElementById('stat-cast').textContent = data.votes_cast.toLocaleString();
 
-    const allCandidates = ['Seth Opollo', 'Victor Wanyama', 'Ojay', 'Fatuma Kapera'];
     const map = {};
     data.results.forEach(r => map[r.candidate] = r.votes);
     const total = data.votes_cast || 1;
 
-    // Find leader
     const leader = data.results[0];
     document.getElementById('stat-leader').textContent = leader ? leader.candidate.split(' ')[0] : '—';
 
-    document.getElementById('results-list').innerHTML = allCandidates.map(name => {
+    document.getElementById('results-list').innerHTML = ALL_CANDIDATES.map(name => {
       const votes = map[name] || 0;
       const pct = ((votes / total) * 100).toFixed(1);
       return `
