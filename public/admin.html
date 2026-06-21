@@ -9,242 +9,52 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --ink: #0f1117;
-      --ink-light: #4a4f5e;
-      --bg: #f7f7f5;
-      --surface: #ffffff;
-      --accent: #1a4f8a;
-      --accent-light: #e8f0fa;
-      --border: #e0e0d8;
-      --radius: 10px;
-      --error: #b83232;
-      --error-bg: #fdf0f0;
+      --ink: #0f1117; --ink-light: #4a4f5e; --bg: #f7f7f5; --surface: #ffffff;
+      --accent: #1a4f8a; --accent-light: #e8f0fa; --border: #e0e0d8;
+      --error: #b83232; --error-bg: #fdf0f0; --radius: 10px;
     }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      min-height: 100vh;
-    }
-
-    header {
-      background: var(--accent);
-      color: white;
-      padding: 14px 28px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    header .badge {
-      background: rgba(255,255,255,0.18);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 4px;
-    }
-
-    header .title {
-      font-family: 'Playfair Display', serif;
-      font-size: 18px;
-      font-weight: 700;
-    }
-
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
+    header { background: var(--accent); color: white; padding: 14px 28px; display: flex; align-items: center; gap: 12px; }
+    header .badge { background: rgba(255,255,255,0.18); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 4px; }
+    header .title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
     main { max-width: 680px; margin: 0 auto; padding: 48px 20px; }
-
-    /* Login form */
-    #login-section .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 36px 32px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-
-    #login-section h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      margin-bottom: 6px;
-    }
-
-    #login-section p {
-      font-size: 13.5px;
-      color: var(--ink-light);
-      margin-bottom: 28px;
-    }
-
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      margin-bottom: 6px;
-    }
-
-    input {
-      width: 100%;
-      padding: 11px 14px;
-      font-size: 15px;
-      font-family: 'Inter', sans-serif;
-      border: 1.5px solid var(--border);
-      border-radius: 7px;
-      background: var(--bg);
-      color: var(--ink);
-      outline: none;
-      transition: border-color 0.15s;
-      margin-bottom: 18px;
-    }
-
+    #login-section .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    #login-section h1 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 6px; }
+    #login-section p { font-size: 13.5px; color: var(--ink-light); margin-bottom: 28px; }
+    label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 6px; }
+    input { width: 100%; padding: 11px 14px; font-size: 15px; font-family: 'Inter', sans-serif; border: 1.5px solid var(--border); border-radius: 7px; background: var(--bg); color: var(--ink); outline: none; transition: border-color 0.15s; margin-bottom: 18px; }
     input:focus { border-color: var(--accent); background: white; }
-
-    button.primary {
-      width: 100%;
-      padding: 12px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 7px;
-      font-size: 15px;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
+    button.primary { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 7px; font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.15s; }
     button.primary:hover { background: #163f70; }
-    button.primary:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .error-msg {
-      background: var(--error-bg);
-      color: var(--error);
-      padding: 11px 14px;
-      border-radius: 7px;
-      font-size: 13.5px;
-      margin-bottom: 16px;
-      display: none;
-    }
-
-    /* Dashboard */
+    .error-msg { background: var(--error-bg); color: var(--error); padding: 11px 14px; border-radius: 7px; font-size: 13.5px; margin-bottom: 16px; display: none; }
     #dashboard-section { display: none; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .stat-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 18px;
-      text-align: center;
-    }
-
-    .stat-box .num {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--accent);
-      font-variant-numeric: tabular-nums;
-      margin-bottom: 4px;
-    }
-
-    .stat-box .lbl {
-      font-size: 12px;
-      color: var(--ink-light);
-      font-weight: 500;
-    }
-
-    .card2 {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px 28px;
-      margin-bottom: 18px;
-    }
-
-    .card2 h2 {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--ink-light);
-      margin-bottom: 20px;
-    }
-
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+    .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 18px; text-align: center; }
+    .stat-box .num { font-size: 32px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+    .stat-box .lbl { font-size: 12px; color: var(--ink-light); font-weight: 500; }
+    .card2 { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 18px; }
+    .card2 h2 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); margin-bottom: 20px; }
     .result-row { margin-bottom: 16px; }
-
-    .result-row .meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
+    .result-row .meta { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
     .result-row .meta .cname { font-weight: 600; }
     .result-row .meta .pct { color: var(--ink-light); font-variant-numeric: tabular-nums; }
-
-    .bar-track {
-      height: 8px;
-      background: var(--border);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 99px;
-      transition: width 0.6s ease;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    button.secondary {
-      padding: 10px 18px;
-      background: var(--surface);
-      color: var(--accent);
-      border: 1.5px solid var(--accent);
-      border-radius: 7px;
-      font-size: 13.5px;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
+    .bar-track { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.6s ease; }
+    button.secondary { padding: 10px 18px; background: var(--surface); color: var(--accent); border: 1.5px solid var(--accent); border-radius: 7px; font-size: 13.5px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: background 0.15s; }
     button.secondary:hover { background: var(--accent-light); }
-
-    @media (max-width: 480px) {
-      .stats { grid-template-columns: 1fr 1fr; }
-    }
   </style>
 </head>
 <body>
-
 <header>
   <span class="badge">Admin</span>
   <span class="title">Election Dashboard</span>
 </header>
-
 <main>
-  <!-- Login -->
   <div id="login-section">
     <div class="card">
       <h1>Admin Login</h1>
-      <p>Restricted area. Enter your administrator credentials to view results and manage voter codes.</p>
+      <p>Enter your administrator credentials to view live results.</p>
       <div class="error-msg" id="err">Invalid username or password.</div>
       <label for="u">Username</label>
       <input type="text" id="u" autocomplete="username" />
@@ -254,20 +64,15 @@
     </div>
   </div>
 
-  <!-- Dashboard -->
   <div id="dashboard-section">
     <div class="stats">
       <div class="stat-box">
-        <div class="num" id="stat-total">—</div>
-        <div class="lbl">Total Codes</div>
-      </div>
-      <div class="stat-box">
         <div class="num" id="stat-cast">—</div>
-        <div class="lbl">Votes Cast</div>
+        <div class="lbl">Total Votes Cast</div>
       </div>
       <div class="stat-box">
-        <div class="num" id="stat-pct">—</div>
-        <div class="lbl">Turnout</div>
+        <div class="num" id="stat-leader">—</div>
+        <div class="lbl">Current Leader</div>
       </div>
     </div>
 
@@ -278,10 +83,7 @@
 
     <div class="card2">
       <h2>Actions</h2>
-      <div class="actions">
-        <button class="secondary" onclick="refresh()">↻ Refresh Results</button>
-        <button class="secondary" onclick="exportCodes()">↓ Export Voter Codes (CSV)</button>
-      </div>
+      <button class="secondary" onclick="loadResults()">↻ Refresh Results</button>
     </div>
   </div>
 </main>
@@ -308,11 +110,8 @@
     }
   }
 
-  // Allow Enter key to log in
   document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && document.getElementById('login-section').style.display !== 'none') {
-      login();
-    }
+    if (e.key === 'Enter' && document.getElementById('login-section').style.display !== 'none') login();
   });
 
   async function loadResults() {
@@ -320,18 +119,18 @@
     if (!res.ok) return;
     const data = await res.json();
 
-    document.getElementById('stat-total').textContent = data.total_voters.toLocaleString();
     document.getElementById('stat-cast').textContent = data.votes_cast.toLocaleString();
-    const pct = data.total_voters ? ((data.votes_cast / data.total_voters) * 100).toFixed(1) + '%' : '0%';
-    document.getElementById('stat-pct').textContent = pct;
 
     const allCandidates = ['Seth Opollo', 'Victor Wanyama', 'Ojay', 'Fatuma Kapera'];
     const map = {};
     data.results.forEach(r => map[r.candidate] = r.votes);
     const total = data.votes_cast || 1;
 
-    const list = document.getElementById('results-list');
-    list.innerHTML = allCandidates.map(name => {
+    // Find leader
+    const leader = data.results[0];
+    document.getElementById('stat-leader').textContent = leader ? leader.candidate.split(' ')[0] : '—';
+
+    document.getElementById('results-list').innerHTML = allCandidates.map(name => {
       const votes = map[name] || 0;
       const pct = ((votes / total) * 100).toFixed(1);
       return `
@@ -340,21 +139,13 @@
             <span class="cname">${name}</span>
             <span class="pct">${pct}% &nbsp;(${votes} votes)</span>
           </div>
-          <div class="bar-track">
-            <div class="bar-fill" style="width:0%" data-width="${pct}%"></div>
-          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:0%" data-width="${pct}%"></div></div>
         </div>`;
     }).join('');
 
     setTimeout(() => {
       document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.dataset.width);
     }, 50);
-  }
-
-  function refresh() { loadResults(); }
-
-  function exportCodes() {
-    window.location.href = '/api/admin-export';
   }
 </script>
 </body>

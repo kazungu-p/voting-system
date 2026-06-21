@@ -1,6 +1,11 @@
 # Pro Voting System
 
-A secure online voting system deployable on Vercel with a Neon PostgreSQL database.
+Secure online voting using national ID numbers. Built for Vercel + Neon PostgreSQL.
+
+## How it works
+- Voters enter their 8-digit national ID number and select a candidate
+- Each ID can only vote once (stored as a salted hash — the actual ID is never saved)
+- Admin can view live results at `/admin.html`
 
 ## Candidates
 - Seth Opollo
@@ -15,7 +20,7 @@ A secure online voting system deployable on Vercel with a Neon PostgreSQL databa
 2. Create a new project
 3. Copy the **Connection string** (starts with `postgresql://...`)
 
-### 2. Push this project to GitHub
+### 2. Push to GitHub
 ```bash
 git init
 git add .
@@ -25,33 +30,27 @@ git push -u origin main
 ```
 
 ### 3. Deploy to Vercel
-1. Go to https://vercel.com and sign in with GitHub
-2. Click **Add New > Project**, import your repo
-3. Click **Deploy** (default settings are fine)
+1. Go to https://vercel.com → **Add New > Project** → import your repo
+2. Click **Deploy**
 
 ### 4. Add Environment Variables in Vercel
-Go to your project → **Settings → Environment Variables** and add:
+Go to **Settings → Environment Variables**:
 
 | Name | Value |
 |------|-------|
 | `DATABASE_URL` | Your Neon connection string |
 | `ADMIN_USERNAME` | Your chosen admin username |
 | `ADMIN_PASSWORD` | A strong password |
-| `SESSION_SECRET` | A random 32+ char string (generate at https://generate-secret.vercel.app/32) |
+| `SESSION_SECRET` | Random string from https://generate-secret.vercel.app/32 |
 
-Then go to **Deployments** and **Redeploy** so the env vars take effect.
+Then **Deployments → Redeploy**.
 
 ### 5. Done!
 - **Voter link:** `https://your-app.vercel.app`
 - **Admin dashboard:** `https://your-app.vercel.app/admin.html`
 
-## Distributing Voter Codes
-After deploying, log in to the admin dashboard and click **Export Voter Codes (CSV)** to download all 2000 codes. Distribute one code per voter.
-
-## Security Features
-- Random 8-character voter codes (not sequential)
-- Each code is single-use
-- Admin credentials stored as environment variables (not in code)
-- Rate limiting: max 10 vote attempts per IP per 15 minutes
+## Security
+- ID numbers are never stored — only a salted SHA-256 hash
+- Rate limiting: max 10 attempts per IP per 15 minutes
+- Admin credentials in environment variables
 - HTTP-only session cookies
-- No sensitive data in the repository
